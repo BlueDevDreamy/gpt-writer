@@ -23,6 +23,7 @@ function toggleDialog() {
     iframe.style.width = '100%';
     iframe.style.height = '100%';
     iframe.style.border = 'none';
+    iframe.style.background = 'transparent';
 
     // Append iframe to dialog
     dialog.appendChild(iframe);

@@ -29,10 +29,10 @@ const App: React.FC = () => {
 
 
   return (
-    <div className="m-[auto] flex items-center justify-center min-h-screen bg-[rgb(216 222 233 / 0%)]">
+    <div className="m-[auto] flex items-center justify-center min-h-screen bg-[rgb(216_222_233_/_0%)]">
       <div className="w-[800px] bg-white shadow-lg rounded-lg overflow-hidden">
         <Header />
-        {!contextshow && <div className='cursor-pointer t-[32px] m-[35px] flex items-center gap-2 ml-8 rounded border border-brown w-[105px] p-1 bg-yellow text-[13px]' onClick={hadleContext}>Add Context<FiPlus /></div>}
+        {!contextshow && <div className='cursor-pointer t-[32px] m-[35px] flex items-center text-[#222] gap-2 ml-8 rounded border border-brown w-[105px] p-1 bg-yellow text-[13px]' onClick={hadleContext}>Add Context<FiPlus /></div>}
         <div className="m-4 border border-brown rounded-custom-small">
 
           {contextshow &&
