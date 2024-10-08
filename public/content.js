@@ -57,7 +57,7 @@ if (!window.listenerAdded) {
   window.addEventListener('message', (event) => {
     // Ensure the message is coming from the correct origin
     if (event.source === window) return; // Only accept messages from the same window
-    console.log("61362");
+    console.log(event.data);
     if (event.data && event.data.type === 'TOGGLE_DIALOG') {
       toggleDialog();
       // Forward the message to the background script
