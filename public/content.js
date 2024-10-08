@@ -12,8 +12,9 @@ function toggleDialog() {
     dialog.style.position = 'fixed';
     dialog.style.border = 'none';
     dialog.style.display = 'block';
-    dialog.style.backgroundColor = 'rgba(0,0,0,0.5)';
+    dialog.style.backgroundColor = 'rgba(0,0,0,0)';
     dialog.style.overflow = 'hidden';
+    dialog.style.margin = '0px';
 
     document.body.appendChild(dialog);
 
@@ -30,6 +31,11 @@ function toggleDialog() {
 
     // Show the dialog
     dialog.showModal();
+    
+    iframe.contentWindow.background = 'transparent';
+    iframe.contentWindow.backgroundColor = 'transparent';
+    iframe.contentDocument.background = 'transparent';
+    iframe.contentDocument.backgroundColor = 'transparent';
   } else {
     // Toggle the dialog's visibility
     if (dialog.style.display != "none") {
@@ -57,7 +63,7 @@ if (!window.listenerAdded) {
   // Listen for messages from the webpage
   window.addEventListener('message', (event) => {
     // Ensure the message is coming from the correct origin
-    if (event.source === window) return; // Only accept messages from the same window
+    // if (event.source === window) return; // Only accept messages from the same window
     console.log(event.data);
     if (event.data && event.data.type === 'TOGGLE_DIALOG') {
       toggleDialog();
