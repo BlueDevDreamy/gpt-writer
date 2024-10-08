@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { ChevronDown } from 'lucide-react';
+import { ChevronUp } from 'lucide-react';
+import { RxCross1 } from "react-icons/rx";
 
 interface LengthSelectorProps {
   onChange: (length: string) => void;
@@ -22,20 +23,13 @@ const LengthSelector: React.FC<LengthSelectorProps> = ({ onChange }) => {
   };
 
   return (
-    <div className="relative">
-      <button
-        onClick={toggleMenu}
-        className="flex items-center justify-between w-full p-2 border rounded-md text-gray-700 bg-gray-100 hover:bg-gray-200"
-      >
-        <span>{selectedLength}</span>
-        <ChevronDown className="w-4 h-4" />
-      </button>
+    <div className="relative h-[30px]">
       {isOpen && (
-        <div className="absolute z-10 mt-2 w-full bg-white border rounded-md shadow-lg">
+        <div className="absolute z-10 mt-2 w-full bottom-[35px] bg-white border rounded-md shadow-lg">
           {lengths.map((length, index) => (
             <div
               key={index}
-              className="p-2 cursor-pointer hover:bg-gray-100 text-gray-700"
+              className="py-1 px-2 cursor-pointer hover:bg-yellow text-gray-700"
               onClick={() => selectLength(length)}
             >
               {length}
@@ -43,6 +37,13 @@ const LengthSelector: React.FC<LengthSelectorProps> = ({ onChange }) => {
           ))}
         </div>
       )}
+      <button
+        onClick={toggleMenu}
+        className="flex items-center justify-between w-[90px] p-1 border rounded-md text-gray-700 bg-yellow hover:bg-yellow h-[30px]"
+      >
+        <span>{selectedLength}</span>
+        {isOpen ? <ChevronUp className="w-4 h-4" /> : <RxCross1 className="w-4 h-4" />}
+      </button>
     </div>
   );
 };
