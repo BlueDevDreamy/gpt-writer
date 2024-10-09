@@ -58,7 +58,7 @@ const EmailResponder: React.FC<EmailResponderProps> = ({ context, tone, length, 
         </div>
       </div>}
       {response && (
-        <div className="mt-3 p-4 mb-1 bg-gray-100 rounded-md">
+        <div className="text-[#222] mt-3 p-4 mb-1 bg-gray-100 rounded-md">
           <h3 className="font-bold mb-2">Generated Response:</h3>
           <p>{response}</p>
         </div>

@@ -7,9 +7,10 @@ interface ContextFieldProps {
   placeholder: string;
   value: string;
   onChange: (value: string) => void;
+  hadleContext: (value: boolean) => void;
 }
 
-const ContextField: React.FC<ContextFieldProps> = ({ placeholder, value, onChange }) => {
+const ContextField: React.FC<ContextFieldProps> = ({ placeholder, value, onChange, hadleContext }) => {
 
   const handleClear = () => {
     onChange('');
@@ -24,12 +25,12 @@ const ContextField: React.FC<ContextFieldProps> = ({ placeholder, value, onChang
       <div className="rounded-md">
         <div className="flex justify-between items-center px-2 py-2 bg-gray-50 ">
           <button
-            className="flex items-center text-[#222]-800 hover:text-gray-800"
+            className="flex items-center text-[#222]"
           >
-            <BsArrowReturnRight size={16} className="mr-2 text-[#222]" />
+            <BsArrowReturnRight size={16} className="mr-2" />
             Context
           </button>
-          <button onClick={handleClear} className="text-gray-400 hover:text-gray-600">
+          <button onClick={() => { handleClear; hadleContext(true) }} className="text-gray-400 hover:text-gray-600">
             <ImBin2 size={16} />
           </button>
         </div>

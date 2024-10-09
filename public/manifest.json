@@ -16,6 +16,9 @@
                 "<all_urls>"
             ],
             "js": [
+                "react.production.min.js",
+                "react-dom.production.min.js",
+                "modal.js",
                 "content.js"
             ]
         }
@@ -23,13 +26,15 @@
     "web_accessible_resources": [
         {
             "resources": [
-                "index.html",
-                "static/*",
-                "public/*"
+                "*",
+                "assets/*"
             ],
             "matches": [
                 "<all_urls>"
             ]
         }
-    ]
+    ],
+    "content_security_policy": {
+      "extension_pages": "script-src 'self'; object-src 'self';"
+    }
 }

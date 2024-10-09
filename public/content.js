@@ -1,76 +1,65 @@
-// Listen for messages from the background script
-function toggleDialog() {
-  let dialog = document.getElementById('my-dialog');   // Check if dialog already exists
+if (!window.gptLoaded) {
+  window.gptLoaded = true;
+  const loadScript = (src) => {
+    return new Promise((resolve, reject) => {
+      console.log("Loading script...");
+      const script = document.createElement('script');
+      script.src = src;
+      script.onload = () => resolve();
+      script.onerror = () => reject(new Error(`Failed to load script: ${src}`));
+      document.head.appendChild(script);
+    });
+  };
 
-  if (!dialog) {
-    // If the dialog does not exist, create it
-    dialog = document.createElement('dialog');
-    dialog.setAttribute('id', 'my-dialog');
-    dialog.style.width = '100%';
-    dialog.style.height = '100%';
-    dialog.style.zIndex = '10000';
-    dialog.style.position = 'fixed';
-    dialog.style.border = 'none';
-    dialog.style.display = 'block';
-    dialog.style.backgroundColor = 'rgba(0,0,0,0)';
-    dialog.style.overflow = 'hidden';
-    dialog.style.margin = '0px';
+  let rootElement;
 
-    document.body.appendChild(dialog);
-
-    // Create an iframe to load the React app
-    const iframe = document.createElement('iframe');
-    iframe.setAttribute('src', chrome.runtime.getURL('index.html'));   // Point to the React app
-    iframe.style.width = '100%';
-    iframe.style.height = '100%';
-    iframe.style.border = 'none';
-    iframe.style.background = 'transparent';
-
-    // Append iframe to dialog
-    dialog.appendChild(iframe);
-
-    // Show the dialog
-    dialog.showModal();
-    
-    iframe.contentWindow.background = 'transparent';
-    iframe.contentWindow.backgroundColor = 'transparent';
-    iframe.contentDocument.background = 'transparent';
-    iframe.contentDocument.backgroundColor = 'transparent';
-  } else {
-    // Toggle the dialog's visibility
-    if (dialog.style.display != "none") {
-      console.log("close");
-      dialog.style.display = "none";
-      dialog.close();   // Close the dialog if it's open
-    } else {
-      dialog.style.display = 'block';
-      dialog.showModal();   // Show the dialog if it's closed
+  const tryToggleModal = () => {
+    let create = false;
+    if (rootElement == null || !document.contains(rootElement)) {
+      let element = document.createElement('div');
+      element.style.position = "fixed";
+      element.style.display = "flex";
+      element.style.zIndex = "9999990";
+      element.style.left = "calc(50vw - 350px)";
+      element.style.top = "calc(50vh - 250px)";
+      document.body.appendChild(element);
+      rootElement = element;
+      create = true;
+      loadReact();
     }
+    toggleModal(rootElement, create);
   }
-};
 
-if (!window.listenerAdded) {
+  const loadReact = async () => {
+    await loadScript(chrome.runtime.getURL('react.production.min.js')); // Local path to your bundled React component
+    await loadScript(chrome.runtime.getURL('react-dom.production.min.js')); // Local path to your bundled React component
+    await loadScript(chrome.runtime.getURL('modal.js')); // Local path to your bundled React component
+  };
 
-  window.listenerAdded = true;
-  chrome.runtime.onMessage.addListener((message) => {
-
-    if (message.action === 'toggleDialog') {
-      toggleDialog();
+  // Listen for messages to open the modal
+  chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+    if (request.action === 'toggleDialog') {
+      // if (!window.scriptLoaded) {
+      //   loadReact();
+      //   window.scriptLoaded = true;
+      // }
+      tryToggleModal();
     }
   });
 
-
-  // Listen for messages from the webpage
   window.addEventListener('message', (event) => {
-    // Ensure the message is coming from the correct origin
-    // if (event.source === window) return; // Only accept messages from the same window
-    console.log(event.data);
-    if (event.data && event.data.type === 'TOGGLE_DIALOG') {
-      toggleDialog();
-      // Forward the message to the background script
-      // chrome.runtime.sendMessage({ action: 'toggleDialog' }, (response) => {
-      //   console.log(response); // Optional: Handle the response from the background script
-      // });
+    // Security check: Ensure the message is from a trusted source
+    if (event.origin !== window.location.origin) {
+      return; // Ignore messages from untrusted sources
+    }
+
+    // Handle the message
+    const { type } = event.data;
+
+    if (type === 'TOGGLE_DIALOG') {
+      // Perform actions for 'toggleDialog'
+      console.log('Toggle dialog received');
+      tryToggleModal();  // Call your modal toggling logic here
     }
   });
 }

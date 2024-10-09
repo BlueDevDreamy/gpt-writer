@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
-import ContextField from './components/ContextField.tsx';
-import PromptInput from './components/PromptInput.tsx';
-import ModelSelector from './components/ModelSelector.tsx';
-import ToneSelector from './components/ToneSelector.tsx';
-import LengthSelector from './components/LengthSelector.tsx';
-import EmailResponder from './components/EmailResponder.tsx';
-import Header from './components/Header.tsx';
+// import ReactDraggableResizable from 'react-draggable-resizable';
+import Draggable from 'react-draggable';
+import ContextField from './components/ContextField';
+import PromptInput from './components/PromptInput';
+import ModelSelector from './components/ModelSelector';
+import ToneSelector from './components/ToneSelector';
+import LengthSelector from './components/LengthSelector';
+import EmailResponder from './components/EmailResponder';
+import Header from './components/Header';
 import { IoSend } from 'react-icons/io5';
 import { FiPlus } from "react-icons/fi";
 
@@ -23,20 +25,46 @@ const App: React.FC = () => {
     setTriggerGenerate((prev) => !prev); // Toggle the state to trigger useEffect in EmailResponder
   };
 
-  const hadleContext = () => {
-    setcontextshow(true)
+  const hadleContext = (prev: boolean) => {
+    setcontextshow(!prev)
   }
+
+  // Set default size and position
+  const defaultWidth = 700;
+  const defaultHeight = 300;
+
+  const [size, setSize] = useState({ width: defaultWidth, height: defaultHeight });
+
+  // Center position based on the viewport size
+  const centerX = window.innerWidth / 2 - defaultWidth / 2;
+  const centerY = window.innerHeight / 2 - defaultHeight / 2;
+
+  const [position, setPosition] = useState({ x: centerX, y: centerY });
+
+  // Handle resize event
+  const handleResize = (left: any, top: any, width: any, height: any) => {
+    setSize({
+      width: width,
+      height: height
+    });
+  };
+
+  // Handle drag event
+  const handleDrag = (left: any, top: any) => {
+    setPosition({ x: left, y: top });
+  };
 
 
   return (
-    <div className="m-[auto] flex items-center justify-center min-h-screen bg-[rgb(216_222_233_/_0%)]">
-      <div className="w-[800px] bg-white shadow-lg rounded-lg overflow-hidden">
+    <Draggable>
+      <div className="cursor-pointer w-[700px] bg-white shadow-lg rounded-lg overflow-hidden position-relative" style={{ zIndex: "9999991", left: "50vw - 350px", top: "50vh - 100px" }}>
         <Header />
-        {!contextshow && <div className='cursor-pointer t-[32px] m-[35px] flex items-center text-[#222] gap-2 ml-8 rounded border border-brown w-[105px] p-1 bg-yellow text-[13px]' onClick={hadleContext}>Add Context<FiPlus /></div>}
+        {!contextshow && <div className='cursor-pointer t-[32px] m-[35px] flex items-center text-[#222] gap-2 ml-8 rounded border border-brown w-[107px] p-1 bg-yellow text-[13px]' onClick={() => hadleContext(false)}>Add Context<FiPlus /></div>}
         <div className="m-4 border border-brown rounded-custom-small">
 
           {contextshow &&
             <ContextField
+              hadleContext={hadleContext}
               placeholder="Add any additional information for your prompt"
               value={context}
               onChange={setContext}
@@ -65,7 +93,9 @@ const App: React.FC = () => {
           <EmailResponder context={context} tone={tone} length={length} triggerGenerate={triggerGenerate} />
         </div>
       </div>
-    </div >
+    </Draggable>
+    // {/* </ReactDraggableResizable> */}
+    // </div >
   );
 };
 

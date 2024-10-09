@@ -1,17 +1,21 @@
-import React, { useState } from 'react';
+import React, { ReactNode, useState } from 'react';
 import { ChevronUp } from 'lucide-react';
-import chat4mini from "../assets/openai.svg"
-import gpt4 from "../assets/gpt4.svg"
-import gemini from "../assets/gemini.svg"
-import claud from "../assets/claud.svg"
+import Chat4mini from "../assets/openai.svg"
+import Gpt4 from "../assets/gpt4.svg"
+import Gemini from "../assets/gemini.svg"
+import Claud from "../assets/claud.svg"
 import { RxCross1 } from "react-icons/rx";
 
+// const chat4mini = chrome.runtime.getURL("assets/openai.svg");
+// const gpt4 = chrome.runtime.getURL("assets/gpt4.svg");
+// const gemini = chrome.runtime.getURL("assets/gemini.svg");
+// const claud = chrome.runtime.getURL("assets/claud.svg");
 
 // Definición de tipos
 interface Model {
   name: string;
   locked: boolean;
-  icon: string;
+  icon: ReactNode;
 }
 
 interface ModelSelectorProps {
@@ -23,14 +27,14 @@ const ModelSelector: React.FC<ModelSelectorProps> = ({ onChange }) => {
   const [selectedModel, setSelectedModel] = useState<Model>({
     name: 'GPT 4o Mini',
     locked: false,
-    icon: chat4mini
+    icon: <Chat4mini width={20} height={20} />
   });
 
   const models: Model[] = [
-    { name: 'Sonnet 3.5', locked: true, icon: claud },
-    { name: 'GPT 4o', locked: true, icon: gpt4 },
-    { name: 'GPT 4o Mini', locked: false, icon: chat4mini },
-    { name: 'Gemini 1.5F', locked: false, icon: gemini },
+    { name: 'Sonnet 3.5', locked: true, icon: <Claud width={20} height={20} /> },
+    { name: 'GPT 4o', locked: true, icon: <Gpt4 width={20} height={20} /> },
+    { name: 'GPT 4o Mini', locked: false, icon: <Chat4mini width={20} height={20} /> },
+    { name: 'Gemini 1.5F', locked: false, icon: <Gemini width={20} height={20} /> },
   ];
 
   const toggleMenu = () => setIsOpen(!isOpen);
@@ -59,7 +63,8 @@ const ModelSelector: React.FC<ModelSelectorProps> = ({ onChange }) => {
                 role="menuitem"
                 disabled={model.locked}
               >
-                <img src={model.icon} alt={`${model.name} icon`} className="w-6 h-6 mr-2" />
+                {model.icon}
+                {/* <img src={model.icon} alt={`${model.name} icon`} className="w-6 h-6 mr-2" /> */}
                 <span className="flex-grow">{model.name}</span>
                 {model.locked && <span className="ml-3 text-gray-400">🔒</span>}
               </button>
@@ -71,9 +76,10 @@ const ModelSelector: React.FC<ModelSelectorProps> = ({ onChange }) => {
         <button
           type="button"
           onClick={toggleMenu}
-          className="inline-flex justify-between items-center w-full h-[30px] rounded-md border border-yellow shadow-sm px-2 py-1 bg-yellow text-sm font-medium text-gray-700 hover:bg-yellow focus:outline-none focus:ring-0"
+          className="inline-flex justify-between items-center w-[150px] h-[30px] rounded-md border border-yellow shadow-sm px-2 py-1 bg-yellow text-sm font-medium text-gray-700 hover:bg-yellow focus:outline-none focus:ring-0"
         >
-          <img src={selectedModel.icon} alt={`${selectedModel.name} icon`} className="w-6 h-6 mr-2" />
+          {selectedModel.icon}
+          {/* <img src={selectedModel.icon} alt={`${selectedModel.name} icon`} className="w-6 h-6 mr-2" /> */}
           {/* <img src={selectedModel.icon} className="w-6 h-6 mr-2" /> */}
           <span>{selectedModel.name}</span>
           {isOpen ? <ChevronUp className="ml-2 h-5 w-5" aria-hidden="true" /> : <RxCross1 className="ml-2 h-4 w-4" aria-hidden="true" />}
